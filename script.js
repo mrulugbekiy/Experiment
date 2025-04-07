@@ -1,7 +1,5 @@
 const classmates = [
 
-
-
   {
     name: "Iroda Shavkatovna",
     photo: "images/teachers/iroda.jpg",
@@ -92,22 +90,6 @@ const classmates = [
     additionalPhotos: ["images/teachers/chizmachilik2.jpg"],
     socialLinks: []
   },
-  
-
-
-  /*
-  {
-    name: "",
-    photo: "images/.jpg",
-    hobby: "",
-    favorite_subject: "",
-    quote: "",
-    description: "",
-    isFavorite: false,
-    additionalPhotos: [""],
-    socialLinks: []
-  },
-*/
   {
     name: "Abduraxmonova Parizoda",
     photo: "images/girls/parizoda.jpg",
@@ -140,7 +122,6 @@ const classmates = [
     isFavorite: false,
     additionalPhotos: ["images/boys/bosit2.jpg" , "images/boys/bosit3.jpg" ,"images/boys/bosit5.jpg","images/boys/bosit4.jpg", "images/boys/bosit6.jpg","images/boys/bosit7.jpg","images/boys/bosit8.jpg","images/boys/bosit9.jpg"],
     socialLinks: [
-      
     ]
   },
   {
@@ -430,9 +411,6 @@ const classmates = [
     socialLinks: []
   },
   
- 
-  
-  
 ];
 
 const albumData = [
@@ -492,17 +470,7 @@ const albumData = [
   photos: ["images/album/botanika.jpg", "images/album/botanika1.jpg"]
 },
 
-
-
-  /*{
-    date: "",
-    event: "",
-    description: " ,",
-    photos: ["images/album/.jpg", "images/album/.jpg"]
-},
-    */
 ];
-
 const container = document.querySelector(".classmates");
 const searchInput = document.getElementById('search-input');
 const sortSelect = document.getElementById('sort-select');
@@ -515,14 +483,9 @@ const body = document.body;
 const lightbox = document.getElementById('lightbox');
 const lightboxImage = document.querySelector('.lightbox-img');
 const lightboxCloseBtn = document.querySelector('.lightbox-close');
-const passwordLock = document.getElementById('password-lock');
-const passwordInput = document.getElementById('password-input');
-const passwordSubmit = document.getElementById('password-submit');
-const passwordError = document.getElementById('password-error');
 const appContent = document.querySelector('.app-content');
 let currentSlide = 0;
-const PASSWORD_KEY = 'my_secret_password';
-// Функция для отображения одноклассников
+
 function displayClassmates(classmatesToDisplay = classmates) {
   container.innerHTML = '';
   classmatesToDisplay.forEach(classmate => {
@@ -559,7 +522,7 @@ function displayClassmates(classmatesToDisplay = classmates) {
     }, 50 * classmatesToDisplay.indexOf(classmate));
   });
 }
-// Функция для открытия модального окна
+
 function openModal(classmate) {
    modalContent.innerHTML = `
       <div class="profile-modal">
@@ -570,19 +533,14 @@ function openModal(classmate) {
          <p><strong>Qisqa Ma'lumot:</strong> ${classmate.quote}</p>
            <p>${classmate.description}</p>
               <div class="social-links">
-           
-                
-        </div>
+           </div>
          <div class="profile-modal-additional-photos">
         ${classmate.additionalPhotos.map(photo => `<img src="${photo}" alt="${classmate.name}" class="profile-modal-additional-photo">`).join('')}
       </div>
       </div>
     `;
-
   modal.style.display = "block";
-
    const profileModalImages = modalContent.querySelectorAll('.profile-modal-additional-photo');
-
    profileModalImages.forEach(image => {
     image.addEventListener('click', () => {
       openLightbox(image.src);
@@ -591,11 +549,9 @@ function openModal(classmate) {
   });
 }
 
-// Функция для открытия модального окна с альбомом
 function openAlbumModal() {
     modalContent.innerHTML = generateAlbumHTML();
     modal.style.display = "block";
-
   const albumPhotosDivs = modalContent.querySelectorAll('.album-photos');
     albumPhotosDivs.forEach(div => {
       setupSlider(div);
@@ -644,9 +600,8 @@ function generateAlbumHTML() {
 function toggleTheme() {
   body.classList.toggle('dark-theme');
   body.classList.toggle('light-theme');
-    // Сохраняем тему в локальное хранилище
   const currentTheme = body.classList.contains('dark-theme') ? 'dark' : 'light';
-   localStorage.setItem('theme',currentTheme);
+  localStorage.setItem('theme',currentTheme);
 }
 function openLightbox(imageSrc){
  lightboxImage.src = imageSrc;
@@ -657,42 +612,10 @@ function closeLightbox(){
  lightbox.style.display = "none"
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+  appContent.style.display = "block";
+});
 
-// Простая функция для шифрования пароля (не для продакшена)
-function encryptPassword(password) {
-  let encrypted = "";
-  for (let i = 0; i < password.length; i++) {
-    encrypted += String.fromCharCode(password.charCodeAt(i) + 5);
-  }
-  return encrypted;
-}
-
-// Простая функция для дешифрования пароля (не для продакшена)
-function decryptPassword(encryptedPassword) {
-   let decrypted = "";
-  for (let i = 0; i < encryptedPassword.length; i++) {
-    decrypted += String.fromCharCode(encryptedPassword.charCodeAt(i) - 5);
-  }
-  return decrypted;
-}
-function checkPassword(){
-  const savedEncryptedPassword = localStorage.getItem(PASSWORD_KEY);
-  if (savedEncryptedPassword) {
-    const decryptedPassword = decryptPassword(savedEncryptedPassword);
-   if(decryptedPassword == "Hayot"){
-    passwordLock.style.display = "none";
-    appContent.style.display = "block";
-   }
-  else{
-       localStorage.removeItem(PASSWORD_KEY);
-         passwordLock.style.display = "block";
-         appContent.style.display = "none";
-  }
-  } else {
-    passwordLock.style.display = "block";
-    appContent.style.display = "none";
-  }
-}
 modalCloseBtn.addEventListener('click', () => {
   modal.style.display = "none";
 });
@@ -722,52 +645,13 @@ sortSelect.addEventListener('change', () => {
   } else if (sortValue === 'name-reverse') {
     sortedClassmates.sort((a, b) => b.name.localeCompare(a.name));
   }
-
   displayClassmates(sortedClassmates);
 });
 themeButton.addEventListener('click', toggleTheme);
 albumButton.addEventListener('click', openAlbumModal);
-passwordSubmit.addEventListener('click', () => {
-   const password = passwordInput.value;
-    const encryptedPassword = encryptPassword(password);
-  const decryptedPassword = decryptPassword(encryptedPassword);
-
-  if(decryptedPassword == "Hayot"){
-    localStorage.setItem(PASSWORD_KEY, encryptedPassword);
-    passwordLock.style.display = "none";
-     appContent.style.display = "block";
-  }else {
-    passwordError.textContent = 'Xato!';
-    passwordInput.value = '';
-  }
-});
-// Получаем сохраненную тему из локального хранилища
 const savedTheme = localStorage.getItem('theme');
-
-// Если тема была сохранена, применяем её
 if (savedTheme === 'dark') {
   body.classList.add('dark-theme');
-    body.classList.remove('light-theme');
+  body.classList.remove('light-theme');
 }
- checkPassword();
 displayClassmates();
-
-/*
-
-
-  {
-    name: "",
-    photo: "images/.jpg",
-    hobby: "",
-    favorite_subject: "",
-    quote: "",
-    description: "",
-    isFavorite: false,
-    additionalPhotos: [""],
-    socialLinks: []
-  },
-
-  
-
-  Odilov Saidamirxon Umidjon o'g'li 2010 yil 3 Yanvar kuni da tug'ilgan. 332 maktab 6F sinfiga imtihon dan o'tib kirgan va shu sinfda 9 sinfgacha qolgan.11 sinfgacha qolish niyati bor . Kelajakdagi maqsadi : O'z kasbi yo'nalishi bo'yicha Grant asosida o'qishga kirish
-  */ 
